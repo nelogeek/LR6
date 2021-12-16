@@ -83,6 +83,25 @@ void insertBST(Node*& root, int val) {
     else y->right = z;
 }
 
+Node* searchBST(Node* p, int key) {
+    if (p == 0 || p->d == key) return p;
+    if (key < p->d) return searchBST(p->left, key);
+    else return searchBST(p->right, key);
+}
+
+Node* iterative_searchBST(Node* p, int key) {
+    while (p != 0 && key != p->d)
+        if (key < p->d) p = p->left;
+        else p = p->right;
+    return p;
+}
+
+Node* minBST(Node* p) {
+    while (p->left != 0)
+        p = p->left;
+    return p;
+}
+
 
 int main()
 {
