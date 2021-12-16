@@ -12,6 +12,8 @@ struct Node {
 
     Node* right;
 
+    Node() { father = right = left = NULL; }
+
 };
 
 Node* root = NULL;
@@ -60,6 +62,25 @@ void preorderTree(Node* p, int l) {
 
     }
 
+}
+
+void insertBST(Node*& root, int val) {
+    Node* z = new Node;
+    z->d = val;
+    if (root == NULL) {
+        root = z;
+        return;
+    }
+    Node* y = NULL, * x = root;
+    while (x) {
+        y = x;
+        if (z->d < x->d) x = x->left;
+        else x = x->right;
+    }
+    z->father = y;
+    if (y->d > z->d)
+        y->left = z;
+    else y->right = z;
 }
 
 
