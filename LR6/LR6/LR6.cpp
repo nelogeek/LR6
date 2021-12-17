@@ -1,4 +1,7 @@
 ﻿#include <iostream>
+#include <stack>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
@@ -32,7 +35,7 @@ Node* makeTree(Node* root, int N) {
 
     Node* temp = new Node;
 
-    cout << "Значение вершины : " << endl; cin >> val;
+    cout << "Enter vertex: " << endl; cin >> val;
 
     temp->d = val;
 
@@ -102,10 +105,86 @@ Node* minBST(Node* p) {
     return p;
 }
 
+Node* maxBST(Node* p) {
+    while (p->right != 0)
+        p = p->right;
+    return p;
+}
+
+bool isEmpty() {
+    return root == NULL;
+}
+
+Node* succBST(Node* p) {
+    if (p->right) return minBST(p->right);
+    Node* y = p->father;
+    while (y != 0 && p == y->right) {
+        p = y;
+        y = y->father;
+    }
+    return y;
+}
+
+Node* predBST(Node* p) {
+    if (p->left) return maxBST(p->left);
+    Node* y = p->father;
+    while (y != 0 && p == y->left) {
+        p = y;
+        y = y->father;
+    }
+    return y;
+}
+
+void deleteBST(Node*& root, Node* p) {
+    Node* x = NULL, * y = NULL;
+    if (root && p) {
+        if (p->left == 0 || p->right == 0) {
+            y = p;
+        }
+        else y = succBST(p);
+        if (y->left) x = y->left;
+        else x = y->right;
+        if (x) x->father = y->father;
+        if (y->father == 0) root = x;
+        else {
+            if (y == y->father->left)
+                y->father->left = x;
+            else y->father->right = x;
+            if (y != p)p->d = y->d;
+            delete y;
+        }
+    }
+}
+
+void inorderTree(const Node* p)
+{
+    stack<const Node *> stack;
+
+    while (p != NULL || !stack.empty())
+    {
+        while (p != NULL)
+        {
+            stack.push(p);
+            p = p->left;
+        }
+
+        cout << stack.top()->d << ' ';
+        p = stack.top()->right;
+        stack.pop();
+    }
+}
+
+void clear() {
+    root = NULL;
+}
+
 
 int main()
 {
     root = makeTree(root, 5);
     preorderTree(root, 0);
+    cout << "is empty: " << isEmpty() << endl;
+    
+    //inorderTree(root);
 
 }
